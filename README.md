@@ -1,30 +1,30 @@
-HappyMapper
+Xmlmapper
 ===========
 
-Happymapper allows you to parse XML data and convert it quickly and easily into ruby data structures.
+Xmlmapper allows you to parse XML data and convert it quickly and easily into ruby data structures.
 
 This project is a fork of the great work done first by
-[jnunemaker](https://github.com/jnunemaker/happymapper).
+[jnunemaker](https://github.com/jnunemaker/xmlmapper).
 
 ## Major Differences
 
   * [Nokogiri](http://nokogiri.org/) support
   * Text nodes parsing
   * Raw XML content parsing
-  * `#to_xml` support utilizing the same HappyMapper tags
+  * `#to_xml` support utilizing the same XmlMapper tags
   * Numerous fixes for namespaces when using composition of classes
   * Fixes for instances of XML where a namespace is defined but no elements with that namespace are found
 
 ## Installation
 
-### [Rubygems](https://rubyygems.org/gems/nokogiri-happymapper)
+### [Rubygems](https://rubyygems.org/gems/xmlmapper)
 
-    $ gem install nokogiri-happymapper
+    $ gem install xmlmapper
 
 ### [Bundler](http://gembundler.com/)
-Add the `nokogiri-happymapper` gem to your project's `Gemfile`.
+Add the `xmlmapper` gem to your project's `Gemfile`.
 
-    gem 'nokogiri-happymapper', :require => 'happymapper'
+    gem 'xmlmapper'
 
 Run the bundler command to install the gem:
 
@@ -42,14 +42,14 @@ Let's start with a simple example to get our feet wet. Here we have a simple exa
       <country code="de">Germany</country>
     </address>
 
-Happymapper provides support for simple, zero configuration parsing as well as the ability to model the XML content in classes.
+XmlMapper provides support for simple, zero configuration parsing as well as the ability to model the XML content in classes.
 
-## HappyMapper.parse(XML)
+## XmlMapper.parse(XML)
 
 With no classes or configuration you can parse the example XML with little effort:
 
 ```ruby
-address = HappyMapper.parse(ADDRESS_XML_DATA)
+address = XmlMapper.parse(ADDRESS_XML_DATA)
 address.street # => Milchstrasse
 address.housenumber # => 23
 address.postcode # => 26131
@@ -66,13 +66,13 @@ It is important to be aware that this no configuration parsing is limited in cap
 
 ## Address.parse(XML)
 
-Happymapper will let you easily model this information as a class:
+XmlMapper will let you easily model this information as a class:
 
 ```ruby
-require 'happymapper'
+require 'xmlmapper'
 
 class Address
-  include HappyMapper
+  include XmlMapper
 
   tag 'address'
   element :street, String, :tag => 'street'
@@ -83,7 +83,7 @@ class Address
 end
 ```
 
-To make a class HappyMapper compatible you simply `include HappyMapper` within the class definition. This takes care of all the work of defining all the speciality methods and magic you need to get running. As you can see we immediately start using these methods.
+To make a class XmlMapper compatible you simply `include XmlMapper` within the class definition. This takes care of all the work of defining all the speciality methods and magic you need to get running. As you can see we immediately start using these methods.
 
 * `tag` matches the name of the XML tag name 'address'.
 
@@ -119,7 +119,7 @@ puts address.street
 
 Assuming that the constant `ADDRESS_XML_DATA` contains a string representation of the address XML data this is fairly straight-forward save for the `parse` method.
 
-The `parse` method, like `tag` and `element` are all added when you included HappyMapper in the class. Parse is a wonderful, magical place that converts all these declarations that you have made into the data structure you are about to know and love.
+The `parse` method, like `tag` and `element` are all added when you included XmlMapper in the class. Parse is a wonderful, magical place that converts all these declarations that you have made into the data structure you are about to know and love.
 
 But what about the `:single => true`? Right, that is because by default when your object is all done parsing it will be an array. In this case an array with one element, but an array none the less. So the following are equivalent to each other:
 
@@ -159,10 +159,10 @@ puts address.streets.join('\n')
 Imagine that you have to write `streets.join('\n')` for the rest of eternity throughout your code. It would be a nightmare and one that you could avoid by creating your own convenience method.
 
 ```ruby
-require 'happymapper'
+require 'xmlmapper'
 
 class Address
-  include HappyMapper
+  include XmlMapper
 
   tag 'address'
 
@@ -221,7 +221,7 @@ class Feed
 end
 
 class Link
-  include HappyMapper
+  include XmlMapper
 
   attribute :rel, String
   attribute :type, String
@@ -257,7 +257,7 @@ Well if we only going to parse country, on it's own, we would likely create a cl
 
 ```ruby
 class Country
-  include HappyMapper
+  include XmlMapper
 
   tag 'country'
 
@@ -274,7 +274,7 @@ Awesome, now if we were to redeclare our `Address` class we would use our new `C
 
 ```ruby
 class Address
-  include HappyMapper
+  include XmlMapper
 
   tag 'address'
 
@@ -291,7 +291,7 @@ class Address
 end
 ```
 
-Instead of `String`, `Boolean`, or `Integer` we say that it is a `Country` and HappyMapper takes care of the details of continuing the XML mapping through the country element.
+Instead of `String`, `Boolean`, or `Integer` we say that it is a `Country` and XmlMapper takes care of the details of continuing the XML mapping through the country element.
 
 ```ruby
 address = Address.parse(ADDRESS_XML_DATA, :single => true)
@@ -324,7 +324,7 @@ You may want to map the sub-elements contained buried in the 'gallery' as top le
 
 ```ruby
 class Media
-  include HappyMapper
+  include XmlMapper
 
   has_one :title, String, :xpath => 'gallery/title'
   has_one :link, String, :xpath => 'gallery/title/@href'
@@ -339,7 +339,7 @@ While mapping XML to objects you may arrive at a point where you have two or mor
 
 ```ruby
 class Article
-  include HappyMapper
+  include XmlMapper
 
   has_one :title, String
   has_one :author, String
@@ -350,7 +350,7 @@ class Article
 end
 
 class Gallery
-  include HappyMapper
+  include XmlMapper
 
   has_one :title, String
   has_one :author, String
@@ -365,7 +365,7 @@ In this example there are definitely two similarities between our two pieces of 
 
 ```ruby
 class Content
-  include HappyMapper
+  include XmlMapper
 
   has_one :title, String
   has_one :author, String
@@ -373,13 +373,13 @@ class Content
 end
 
 class Article < Content
-  include HappyMapper
+  include XmlMapper
 
   has_one :entry, String
 end
 
 class Gallery < Content
-  include HappyMapper
+  include XmlMapper
 
   has_many :photos, String
 end
@@ -403,21 +403,21 @@ module Content
 end
 
 class Article
-  include HappyMapper
+  include XmlMapper
 
   include Content
   has_one :entry, String
 end
 
 class Gallery
-  include HappyMapper
+  include XmlMapper
 
   include Content
   has_many :photos, String
 end
 ```
 
-Here, when we include `Content` in both of these classes the module method `#included` is called and our class is given as a parameter. So we take that opportunity to do some surgery and define our happymapper elements as well as any other methods that may rely on those instance variables that come along in the package.
+Here, when we include `Content` in both of these classes the module method `#included` is called and our class is given as a parameter. So we take that opportunity to do some surgery and define our xmlmapper elements as well as any other methods that may rely on those instance variables that come along in the package.
 
 
 ## Filtering with XPATH (non-greedy)
@@ -440,10 +440,10 @@ I ran into a case where I wanted to capture all the pictures that were directly 
 The following `Media` class is where I started:
 
 ```ruby
-require 'happymapper'
+require 'xmlmapper'
 
 class Media
-  include HappyMapper
+  include XmlMapper
 
   has_many :galleries, Gallery, :tag => 'gallery'
   has_many :pictures, Picture, :tag => 'picture'
@@ -492,7 +492,7 @@ Here again is our address example with a made up namespace called `prefix` that 
 
 ```ruby
 class Address
-  include HappyMapper
+  include XmlMapper
 
   tag 'address'
   namespace 'prefix'
@@ -587,7 +587,7 @@ Parsing the XML to objects only required you to simply specify the prefix of the
 
 ```ruby
 class Address
-  include HappyMapper
+  include XmlMapper
 
   register_namespace 'prefix', 'http://www.unicornland.com/prefix'
   register_namespace 'different', 'http://www.trollcountry.com/different'

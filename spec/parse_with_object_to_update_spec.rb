@@ -52,20 +52,20 @@ describe "Updating existing objects with .parse and #parse" do
 
   module ParseInstanceSpec
     class SubItem
-      include HappyMapper
+      include XmlMapper
       tag 'subitem'
       attribute :attr1, String
       element :name, String
     end
     class Item
-      include HappyMapper
+      include XmlMapper
       tag 'item'
       attribute :attr1, String
       element :description, String
       has_many :sub_items, SubItem
     end
     class Root
-      include HappyMapper
+      include XmlMapper
       tag 'root'
       attribute :attr1, String
       has_many :items, Item

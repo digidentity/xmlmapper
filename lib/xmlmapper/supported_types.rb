@@ -1,4 +1,4 @@
-module HappyMapper
+module XmlMapper
   module SupportedTypes
     extend self
 
@@ -41,7 +41,7 @@ module HappyMapper
     #
     # @example Registering a DateTime parser
     #
-    #     HappyMapper::SupportedTypes.register_type DateTime do |value|
+    #     XmlMapper::SupportedTypes.register_type DateTime do |value|
     #       DateTime.parse(value,to_s)
     #     end
     #

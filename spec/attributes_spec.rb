@@ -10,7 +10,7 @@ describe "Attribute Method Conversion" do
 
   module AttributeMethodConversion
     class Document
-      include HappyMapper
+      include XmlMapper
 
       has_many :link, String, :attributes => { :'data-src' => String, :type => String, :href => String }
 

@@ -2,11 +2,11 @@ require "spec_helper"
 
 module Sheep
   class Item
-    include HappyMapper
+    include XmlMapper
   end
 
   class Navigator
-    include HappyMapper
+    include XmlMapper
     tag 'navigator'
 
     # This is purposefully set to have the name 'items' with the tag 'item'.

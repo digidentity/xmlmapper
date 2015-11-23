@@ -3,7 +3,7 @@ require 'uri'
 
 module Analytics
   class Property
-    include HappyMapper
+    include XmlMapper
 
     tag 'property'
     namespace 'dxp'
@@ -12,7 +12,7 @@ module Analytics
   end
 
   class Goal
-    include HappyMapper
+    include XmlMapper
 
     # Google Analytics does a dirtry trick where a user with no goals
     # returns a profile without any goals data or the declared namespace
@@ -35,7 +35,7 @@ module Analytics
   end
 
   class Profile
-    include HappyMapper
+    include XmlMapper
 
     tag 'entry'
     element :title, String
@@ -47,7 +47,7 @@ module Analytics
 
 
   class Entry
-    include HappyMapper
+    include XmlMapper
 
     tag 'entry'
     element :id, String
@@ -58,7 +58,7 @@ module Analytics
   end
 
   class Feed
-    include HappyMapper
+    include XmlMapper
 
     tag 'feed'
     element :id, String
@@ -70,7 +70,7 @@ end
 
 module Atom
   class Feed
-    include HappyMapper
+    include XmlMapper
     tag 'feed'
 
     attribute :xmlns, String, :single => true
@@ -87,7 +87,10 @@ module Atom
 end
 
 class Address
-  include HappyMapper
+  include XmlMapper
+
+  attr_accessor :xml_value
+  attr_accessor :xml_content
 
   tag 'address'
   element :street, String
@@ -98,12 +101,12 @@ class Address
 end
 
 class Feature
-  include HappyMapper
+  include XmlMapper
   element :name, String, :xpath => './/text()'
 end
 
 class FeatureBullet
-  include HappyMapper
+  include XmlMapper
 
   tag 'features_bullets'
   has_many :features, Feature
@@ -111,7 +114,7 @@ class FeatureBullet
 end
 
 class Product
-  include HappyMapper
+  include XmlMapper
 
   element :title, String
   has_one :feature_bullets, FeatureBullet
@@ -119,25 +122,25 @@ class Product
 end
 
 class Rate
-  include HappyMapper
+  include XmlMapper
 end
 
 module FamilySearch
   class AlternateIds
-    include HappyMapper
+    include XmlMapper
 
     tag 'alternateIds'
     has_many :ids, String, :tag => 'id'
   end
 
   class Information
-    include HappyMapper
+    include XmlMapper
 
     has_one :alternateIds, AlternateIds
   end
 
   class Person
-    include HappyMapper
+    include XmlMapper
 
     attribute :version, String
     attribute :modified, Time
@@ -146,12 +149,12 @@ module FamilySearch
   end
 
   class Persons
-    include HappyMapper
+    include XmlMapper
     has_many :person, Person
   end
 
   class FamilyTree
-    include HappyMapper
+    include XmlMapper
 
     tag 'familytree'
     attribute :version, String
@@ -163,7 +166,7 @@ end
 
 module FedEx
   class Address
-    include HappyMapper
+    include XmlMapper
 
     tag 'Address'
     namespace 'v2'
@@ -175,7 +178,7 @@ module FedEx
   end
 
   class Event
-    include HappyMapper
+    include XmlMapper
 
     tag 'Events'
     namespace 'v2'
@@ -186,7 +189,7 @@ module FedEx
   end
 
   class PackageWeight
-    include HappyMapper
+    include XmlMapper
 
     tag 'PackageWeight'
     namespace 'v2'
@@ -195,7 +198,7 @@ module FedEx
   end
 
   class TrackDetails
-    include HappyMapper
+    include XmlMapper
 
     tag 'TrackDetails'
     namespace 'v2'
@@ -210,7 +213,7 @@ module FedEx
   end
 
   class Notification
-    include HappyMapper
+    include XmlMapper
 
     tag 'Notifications'
     namespace 'v2'
@@ -222,7 +225,7 @@ module FedEx
   end
 
   class TransactionDetail
-    include HappyMapper
+    include XmlMapper
 
     tag 'TransactionDetail'
     namespace 'v2'
@@ -230,7 +233,7 @@ module FedEx
   end
 
   class TrackReply
-    include HappyMapper
+    include XmlMapper
 
     tag 'TrackReply'
     namespace 'v2'
@@ -243,17 +246,17 @@ module FedEx
 end
 
 class Place
-  include HappyMapper
+  include XmlMapper
   element :name, String
 end
 
 class Radar
-  include HappyMapper
+  include XmlMapper
   has_many :places, Place, :tag => :place
 end
 
 class Post
-  include HappyMapper
+  include XmlMapper
 
   attribute :href, String
   attribute :hash, String
@@ -265,7 +268,7 @@ class Post
 end
 
 class User
-  include HappyMapper
+  include XmlMapper
 
   element :id, Integer
   element :name, String
@@ -279,7 +282,7 @@ class User
 end
 
 class Status
-  include HappyMapper
+  include XmlMapper
 
   register_namespace 'fake', "faka:namespace"
 
@@ -296,7 +299,7 @@ class Status
 end
 
 class CurrentWeather
-  include HappyMapper
+  include XmlMapper
 
   tag 'ob'
   namespace 'aws'
@@ -306,7 +309,7 @@ class CurrentWeather
 end
 
 class Country
-  include HappyMapper
+  include XmlMapper
 
   attribute :code, String
   content :name, String
@@ -314,11 +317,11 @@ end
 
 
 class State
-  include HappyMapper
+  include XmlMapper
 end
 
 class Address
-  include HappyMapper
+  include XmlMapper
 
   tag 'address'
   element :street, String
@@ -334,7 +337,7 @@ class ProductGroup < String; end
 
 module PITA
   class Item
-    include HappyMapper
+    include XmlMapper
 
     tag 'Item' # if you put class in module you need tag
     element :asin, String, :tag => 'ASIN'
@@ -345,7 +348,7 @@ module PITA
   end
 
   class Items
-    include HappyMapper
+    include XmlMapper
 
     tag 'Items' # if you put class in module you need tag
     element :total_results, Integer, :tag => 'TotalResults'
@@ -356,7 +359,7 @@ end
 
 module GitHub
   class Commit
-    include HappyMapper
+    include XmlMapper
 
     tag "commit"
     element :url, String
@@ -369,20 +372,20 @@ end
 
 module QuarterTest
   class Quarter
-    include HappyMapper
+    include XmlMapper
 
     element :start, String
   end
 
   class Details
-    include HappyMapper
+    include XmlMapper
 
     element :round, Integer
     element :quarter, Integer
   end
 
   class Game
-    include HappyMapper
+    include XmlMapper
 
     # in an ideal world, the following elements would all be
     # called 'quarter' with an attribute indicating which quarter
@@ -399,7 +402,7 @@ end
 
 # To check for multiple primitives
 class Artist
-  include HappyMapper
+  include XmlMapper
 
   tag 'artist'
   element :images, String, :tag => "image", :single => false
@@ -407,7 +410,7 @@ class Artist
 end
 
 class Location
-  include HappyMapper
+  include XmlMapper
 
   tag 'point'
   namespace "geo"
@@ -417,7 +420,7 @@ end
 # Testing the XmlContent type
 module Dictionary
   class Variant
-    include HappyMapper
+    include XmlMapper
     tag 'var'
     has_xml_content
 
@@ -427,14 +430,14 @@ module Dictionary
   end
 
   class Definition
-    include HappyMapper
+    include XmlMapper
 
     tag 'def'
     element :text, XmlContent, :tag => 'dtext'
   end
 
   class Record
-    include HappyMapper
+    include XmlMapper
 
     tag 'record'
     has_many :definitions, Definition
@@ -444,7 +447,7 @@ end
 
 module AmbigousItems
   class Item
-    include HappyMapper
+    include XmlMapper
 
     tag 'item'
     element :name, String
@@ -453,7 +456,7 @@ module AmbigousItems
 end
 
 class PublishOptions
-  include HappyMapper
+  include XmlMapper
 
   tag 'publishOptions'
 
@@ -470,7 +473,7 @@ class PublishOptions
 end
 
 class Article
-  include HappyMapper
+  include XmlMapper
 
   tag 'Article'
   namespace 'article'
@@ -487,7 +490,7 @@ class Article
 end
 
 class PartiallyBadArticle
-  include HappyMapper
+  include XmlMapper
 
   attr_writer :xml_value
 
@@ -504,7 +507,7 @@ class PartiallyBadArticle
 end
 
 class Photo
-  include HappyMapper
+  include XmlMapper
 
   tag 'Photo'
   namespace 'photo'
@@ -517,7 +520,7 @@ class Photo
 end
 
 class Gallery
-  include HappyMapper
+  include XmlMapper
 
   tag 'Gallery'
   namespace 'gallery'
@@ -529,7 +532,7 @@ class Gallery
 end
 
 class Video
-  include HappyMapper
+  include XmlMapper
 
   tag 'Video'
   namespace 'video'
@@ -542,14 +545,14 @@ class Video
 end
 
 class OptionalAttribute
-  include HappyMapper
+  include XmlMapper
   tag 'address'
 
   attribute :street, String
 end
 
 class DefaultNamespaceCombi
-  include HappyMapper
+  include XmlMapper
 
 
   register_namespace 'bk', "urn:loc.gov:books"
@@ -564,12 +567,12 @@ class DefaultNamespaceCombi
   element :author, String, :namespace => 'p', :tag => "author"
 end
 
-describe HappyMapper do
+describe XmlMapper do
 
   describe "being included into another class" do
     before do
       @klass = Class.new do
-        include HappyMapper
+        include XmlMapper
 
         def self.to_s
           'Boo'
@@ -577,7 +580,7 @@ describe HappyMapper do
       end
     end
 
-    class Boo; include HappyMapper end
+    class Boo; include XmlMapper end
 
     it "should set attributes to an array" do
       @klass.attributes.should == []
@@ -643,7 +646,7 @@ describe HappyMapper do
     end
 
     it "should default tag name of class in modules to the last constant lowercase" do
-      module Bar; class Baz; include HappyMapper; end; end
+      module Bar; class Baz; include XmlMapper; end; end
       Bar::Baz.tag_name.should == 'baz'
     end
 
@@ -713,10 +716,10 @@ describe HappyMapper do
     first.id.should == 882281424
     first.created_at.should == Time.utc(2008, 8, 9, 5, 38, 12)
     first.source.should == 'web'
-    first.truncated.should be_false
+    first.truncated.should be_falsey
     first.in_reply_to_status_id.should == 1234
     first.in_reply_to_user_id.should == 12345
-    first.favorited.should be_false
+    first.favorited.should be_falsey
     first.user.id.should == 4243
     first.user.name.should == 'John Nunemaker'
     first.user.screen_name.should == 'jnunemaker'
@@ -724,7 +727,7 @@ describe HappyMapper do
     first.user.description.should == 'Loves his wife, ruby, notre dame football and iu basketball'
     first.user.profile_image_url.should == 'http://s3.amazonaws.com/twitter_production/profile_images/53781608/Photo_75_normal.jpg'
     first.user.url.should == 'http://addictedtonew.com'
-    first.user.protected.should be_false
+    first.user.protected.should be_falsey
     first.user.followers_count.should == 486
   end
 
@@ -854,7 +857,7 @@ describe HappyMapper do
   it "should parse xml with multiple namespaces" do
     track = FedEx::TrackReply.parse(fixture_file('multiple_namespaces.xml'))
     track.highest_severity.should == 'SUCCESS'
-    track.more_data.should be_false
+    track.more_data.should be_falsey
     notification = track.notifications.first
     notification.code.should == 0
     notification.localized_message.should == 'Request was successfully processed.'
@@ -878,7 +881,7 @@ describe HappyMapper do
     first_event.timestamp.should == '2009-01-02T06:00:00'
     first_event.address.city.should == 'WICHITA'
     first_event.address.countrycode.should == 'US'
-    first_event.address.residential.should be_false
+    first_event.address.residential.should be_falsey
     first_event.address.state.should == 'KS'
     first_event.address.zip.should == '67226'
     last_event = events[-1]
@@ -887,7 +890,7 @@ describe HappyMapper do
     last_event.timestamp.should == '2008-12-27T09:40:00'
     last_event.address.city.should == 'LONGWOOD'
     last_event.address.countrycode.should == 'US'
-    last_event.address.residential.should be_false
+    last_event.address.residential.should be_falsey
     last_event.address.state.should == 'FL'
     last_event.address.zip.should == '327506398'
     track.tran_detail.cust_tran_id.should == '20090102-111321'
@@ -920,12 +923,12 @@ describe HappyMapper do
   it "should allow instantiating with a string" do
     module StringFoo
       class Bar
-        include HappyMapper
+        include XmlMapper
         has_many :things, 'StringFoo::Thing'
       end
 
       class Thing
-        include HappyMapper
+        include XmlMapper
       end
     end
   end
@@ -1077,13 +1080,13 @@ describe HappyMapper do
   context "when letting user set Nokogiri::XML::ParseOptions" do
     let(:default) {
       Class.new do
-        include HappyMapper
+        include XmlMapper
         element :item, String
       end
     }
     let(:custom) {
       Class.new do
-        include HappyMapper
+        include XmlMapper
         element :item, String
         with_nokogiri_config do |config|
           config.default_xml
@@ -1110,6 +1113,24 @@ describe HappyMapper do
     it 'can clear @nokogiri_config_callback' do
       custom.with_nokogiri_config {}
       expect { custom.parse(fixture_file('set_config_options.xml')) }.to raise_error(Nokogiri::XML::SyntaxError)
+    end
+  end
+
+  context 'xml_value' do
+    it 'does not reformat the xml' do
+      xml = fixture_file('unformatted_address.xml')
+      address = Address.parse(xml, single: true)
+
+      expect(address.xml_value).to eq %{<address><street>Milchstrasse</street><housenumber>23</housenumber></address>}
+    end
+  end
+
+  context 'xml_content' do
+    it 'does not reformat the xml' do
+      xml = fixture_file('unformatted_address.xml')
+      address = Address.parse(xml)
+
+      expect(address.xml_content).to eq %{<street>Milchstrasse</street><housenumber>23</housenumber>}
     end
   end
 

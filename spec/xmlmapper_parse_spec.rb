@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe HappyMapper do
+describe XmlMapper do
 
   context ".parse" do
 
@@ -85,7 +85,7 @@ describe HappyMapper do
     context "after_parse callbacks" do
       module AfterParseSpec
         class Address
-          include HappyMapper
+          include XmlMapper
           element :street, String
         end
       end

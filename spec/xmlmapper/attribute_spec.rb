@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe HappyMapper::Attribute do
+describe XmlMapper::Attribute do
 
   describe "initialization" do
     it 'accepts :default option' do

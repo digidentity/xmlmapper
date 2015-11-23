@@ -16,7 +16,7 @@ describe "Wildcard Root Tag" do
   module GenericBase
     class Base
       include Comparable
-      include HappyMapper
+      include XmlMapper
 
       def initialize(params = {})
         @name = params[:name]
@@ -34,12 +34,12 @@ describe "Wildcard Root Tag" do
       end
     end
     class Sub
-      include HappyMapper
+      include XmlMapper
       tag 'subelement'
       has_one :jello, Base, :tag => 'jello'
     end
     class Root
-      include HappyMapper
+      include XmlMapper
       tag 'root'
       element :description, String
       has_many :blargs, Base, :tag => 'blarg', :xpath => '.'
@@ -60,9 +60,9 @@ describe "Wildcard Root Tag" do
     end
 
     it 'should filter on xpath appropriately' do
-      subject.blargs.should have(2).items
-      subject.jellos.should have(1).items
-      subject.subjellos.should have(1).items
+      expect(subject.blargs.size).to eq 2
+      expect(subject.jellos.size).to eq 1
+      expect(subject.subjellos.size).to eq 1
     end
 
     def base_with(name,href,other)
@@ -89,8 +89,8 @@ describe "Wildcard Root Tag" do
       validate_xpath("/root/jello[1]","jelloname","http://jello.com","")
     end
 
-    it "should properly respect child HappyMapper tags if tag isn't provided on the element defintion" do
-      xml.xpath('root/subelement').should have(1).item
+    it "should properly respect child XmlMapper tags if tag isn't provided on the element defintion" do
+      expect(xml.xpath('root/subelement').size).to eq 1
     end
   end
 end

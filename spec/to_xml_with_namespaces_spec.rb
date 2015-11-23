@@ -6,7 +6,7 @@ module ToXMLWithNamespaces
   # Similar example as the to_xml but this time with namespacing
   #
   class Address
-    include HappyMapper
+    include XmlMapper
 
     register_namespace 'address', 'http://www.company.com/address'
     register_namespace 'country', 'http://www.company.com/country'
@@ -70,7 +70,7 @@ module ToXMLWithNamespaces
   # value.
   #
   class Country
-    include HappyMapper
+    include XmlMapper
 
     register_namespace 'countryName', 'http://www.company.com/countryName'
 
@@ -91,7 +91,7 @@ module ToXMLWithNamespaces
   #xmlns="urn:eventis:prodis:onlineapi:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   #
   class Recipe
-    include HappyMapper
+    include XmlMapper
 
     # this is the default namespace of the document
     register_namespace 'xmlns', 'urn:eventis:prodis:onlineapi:1.0'
@@ -176,7 +176,7 @@ describe "Saving #to_xml", "with xml namespaces" do
       end
     end
 
-    context "when an element type is a HappyMapper subclass" do
+    context "when an element type is a XmlMapper subclass" do
       it "saves attributes" do
         expect(subject.xpath('country:country/@countryCode').text).to eq "us"
       end
@@ -207,14 +207,14 @@ describe "Saving #to_xml", "with xml namespaces" do
     end
 
     class Beverage
-      include HappyMapper
+      include XmlMapper
       namespace 'coffee'
 
       attribute :name, String
     end
 
     class CoffeeMachine
-      include HappyMapper
+      include XmlMapper
       register_namespace 'coffee', "http://coffee.org/Coffee/0.1"
       register_namespace 'beverage', "http://beverages.org/Beverage/0.1"
 

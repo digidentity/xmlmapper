@@ -5,7 +5,7 @@ describe "Attribute Default Value" do
   context "when given a default value" do
 
     class Meal
-      include HappyMapper
+      include XmlMapper
       tag 'meal'
       attribute :type, String, :default => 'omnivore'
     end

@@ -21,7 +21,7 @@ describe "A document with mixed namespaces" do
 
   module MixedNamespaces
     class Address
-      include HappyMapper
+      include XmlMapper
 
       namespace :prefix
       tag :address

@@ -4,7 +4,7 @@ describe "Saving #to_xml" do
 
   module ToXML
     class Address
-      include HappyMapper
+      include XmlMapper
 
       tag 'address'
 
@@ -72,7 +72,7 @@ describe "Saving #to_xml" do
     # value.
     #
     class Country
-      include HappyMapper
+      include XmlMapper
 
       attribute :code, String, :tag => 'countryCode'
       has_one :name, String, :tag => 'countryName'
@@ -83,7 +83,7 @@ describe "Saving #to_xml" do
       # and optional attributes
       #
       class Description
-        include HappyMapper
+        include XmlMapper
         content :description, String
         attribute :category, String, :tag => 'category'
         attribute :rating, String, :tag => 'rating', :state_when_nil => true
@@ -184,7 +184,7 @@ describe "Saving #to_xml" do
     end
   end
 
-  context "when an element type is a HappyMapper subclass" do
+  context "when an element type is a XmlMapper subclass" do
     it "saves attributes" do
       expect(subject.xpath('country/@countryCode').text).to eq "us"
     end

@@ -1,4 +1,4 @@
-module HappyMapper
+module XmlMapper
   class Item
     attr_accessor :name, :type, :tag, :options, :namespace
 

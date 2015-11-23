@@ -1,4 +1,4 @@
-module HappyMapper
+module XmlMapper
   class TextNode < Item
 
     def find(node, namespace, xpath_options)

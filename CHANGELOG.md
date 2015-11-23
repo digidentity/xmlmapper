@@ -6,7 +6,7 @@
 
 * Allow child elements to remove their parent's namespacing (dcarneiro)
 * has_many elements were returning nil because the tag name was being ignored (haarts)
-* Subclassed happymapper classes are allowed to override elements (benoist)
+* Subclassed xmlmapper classes are allowed to override elements (benoist)
 * Attributes on elements with dashes will properly created methods (alex-klepa)
 * 'Embedded' attributes break parsing when parent element is not present (geoffwa)
 
@@ -26,10 +26,10 @@
   within the xml. This implementation addresses issues with calling #to_xml
   with content that was parsed from an xpath. (zrob)
 
-* Parent HappyMapper classes may dictate the name of the tag for the child
-  HappyMapper instances. (zrob)
+* Parent XmlMapper classes may dictate the name of the tag for the child
+  XmlMapper instances. (zrob)
 
 ## 0.5.3/ 2012-09-23
 
 * String is the default type for parsed fields. (crv)
-* Update the attributes of an existing HappyMapper instance with new XML (benoist)
+* Update the attributes of an existing XmlMapper instance with new XML (benoist)

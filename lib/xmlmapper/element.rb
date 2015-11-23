@@ -1,4 +1,4 @@
-module HappyMapper
+module XmlMapper
   class Element < Item
 
     def find(node, namespace, xpath_options)

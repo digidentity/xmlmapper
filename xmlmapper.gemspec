@@ -1,11 +1,11 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'happymapper/version'
+require 'xmlmapper/version'
 
 Gem::Specification.new do |s|
-  s.name = %q{nokogiri-happymapper}
-  s.version = ::HappyMapper::VERSION
+  s.name = %q{xmlmapper}
+  s.version = ::XmlMapper::VERSION
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Damien Le Berrigaud",
@@ -15,12 +15,12 @@ Gem::Specification.new do |s|
     "Etienne Vallette d'Osia",
     "Franklin Webber"]
 
-  s.email = 'franklin.webber@gmail.com'
-  s.date = %q{2014-02-18}
+  s.email = 'bclaassen@digidentity.eu'
+  s.date = %q{2015-11-23}
   s.description = %q{Object to XML Mapping Library, using Nokogiri (fork from John Nunemaker's Happymapper)}
   s.extra_rdoc_files = [ "README.md", "CHANGELOG.md" ]
   s.files = `git ls-files -- lib/*`.split("\n")
-  s.homepage = %q{http://github.com/dam5s/happymapper}
+  s.homepage = %q{http://github.com/digidentity/xmlmapper}
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.4.1}
   s.summary = %q{Provides a simple way to map XML to Ruby Objects and back again.}

@@ -1,18 +1,18 @@
 require 'nokogiri'
 require 'date'
 require 'time'
-require 'happymapper/anonymous_mapper'
+require 'xmlmapper/anonymous_mapper'
 
-module HappyMapper
+module XmlMapper
   class Boolean; end
   class XmlContent; end
 
   extend AnonymousMapper
 
-  DEFAULT_NS = "happymapper"
+  DEFAULT_NS = "xmlmapper"
 
   def self.included(base)
-    if !(base.superclass <= HappyMapper)
+    if !(base.superclass <= XmlMapper)
       base.instance_eval do
         @attributes = {}
         @elements = {}
@@ -237,12 +237,12 @@ module HappyMapper
     # @param [Proc] blk the element definitions inside the place holder tag
     #
     def wrap(name, &blk)
-      # Get an anonymous HappyMapper that has 'name' as its tag and defined
+      # Get an anonymous XmlMapper that has 'name' as its tag and defined
       # in '&blk'.  Then save that to a class instance variable for later use
       wrapper = AnonymousWrapperClassFactory.get(name, &blk)
       @wrapper_anonymous_classes[wrapper.inspect] = wrapper
 
-      # Create getter/setter for each element and attribute defined on the anonymous HappyMapper
+      # Create getter/setter for each element and attribute defined on the anonymous XmlMapper
       # onto this class. They get/set the value by passing thru to the anonymous class.
       passthrus = wrapper.attributes + wrapper.elements
       passthrus.each do |item|
@@ -328,7 +328,7 @@ module HappyMapper
 
       # if a namespace has been provided then set the current namespace to it
       # or set the default namespace to the one defined under 'xmlns'
-      # or set the default namespace to the namespace that matches 'happymapper's
+      # or set the default namespace to the namespace that matches 'xmlmapper's
 
       if options[:namespace]
         namespace = options[:namespace]
@@ -411,7 +411,7 @@ module HappyMapper
 
         part = slice.map do |n|
 
-          # If an existing HappyMapper object is provided, update it with the
+          # If an existing XmlMapper object is provided, update it with the
           # values from the xml being parsed.  Otherwise, create a new object
 
           obj = options[:update] ? options[:update] : new
@@ -430,22 +430,22 @@ module HappyMapper
             obj.send("#{@content.method_name}=",@content.from_xml_node(n, namespace, namespaces))
           end
 
-          # If the HappyMapper class has the method #xml_value=,
+          # If the XmlMapper class has the method #xml_value=,
           # attr_writer :xml_value, or attr_accessor :xml_value then we want to
           # assign the current xml that we just parsed to the xml_value
 
           if obj.respond_to?('xml_value=')
             n.namespaces.each {|name,path| n[name] = path }
-            obj.xml_value = n.to_xml
+            obj.xml_value = n.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::AS_XML)
           end
 
-          # If the HappyMapper class has the method #xml_content=,
+          # If the XmlMapper class has the method #xml_content=,
           # attr_write :xml_content, or attr_accessor :xml_content then we want to
           # assign the child xml that we just parsed to the xml_content
 
           if obj.respond_to?('xml_content=')
             n = n.children if n.respond_to?(:children)
-            obj.xml_content = n.to_xml
+            obj.xml_content = n.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::AS_XML)
           end
 
           # Call any registered after_parse callbacks for the object's class
@@ -494,8 +494,8 @@ module HappyMapper
 
   #
   # Create an xml representation of the specified class based on defined
-  # HappyMapper elements and attributes. The method is defined in a way
-  # that it can be called recursively by classes that are also HappyMapper
+  # XmlMapper elements and attributes. The method is defined in a way
+  # that it can be called recursively by classes that are also XmlMapper
   # classes, allowg for the composition of classes.
   #
   # @param [Nokogiri::XML::Builder] builder an instance of the XML builder which
@@ -509,10 +509,10 @@ module HappyMapper
   # @param [String] tag_from_parent The xml tag to use on the element when being
   #     called recursively.  This lets the parent doc define its own structure.
   #     Otherwise the element uses the tag it has defined for itself.  Should only
-  #     apply when calling a child HappyMapper element.
+  #     apply when calling a child XmlMapper element.
   #
   # @return [String,Nokogiri::XML::Builder] return XML representation of the
-  #      HappyMapper object; when called recursively this is going to return
+  #      XmlMapper object; when called recursively this is going to return
   #      and Nokogiri::XML::Builder object.
   #
   def to_xml(builder = nil, default_namespace = nil, namespace_override = nil,
@@ -694,7 +694,7 @@ module HappyMapper
 
           values.each do |item|
 
-            if item.is_a?(HappyMapper)
+            if item.is_a?(XmlMapper)
 
               #
               # Other items are convertable to xml through the xml builder
@@ -746,8 +746,8 @@ module HappyMapper
   end
 
   # Parse the xml and update this instance. This does not update instances
-  # of HappyMappers that are children of this object.  New instances will be
-  # created for any HappyMapper children of this object.
+  # of XmlMappers that are children of this object.  New instances will be
+  # created for any XmlMapper children of this object.
   #
   # Params and return are the same as the class parse() method above.
   def parse(xml, options = {})
@@ -756,11 +756,11 @@ module HappyMapper
 
   private
 
-  # Factory for creating anonmyous HappyMappers
+  # Factory for creating anonmyous XmlMappers
   class AnonymousWrapperClassFactory
    def self.get(name, &blk)
      Class.new do
-       include HappyMapper
+       include XmlMapper
        tag name
        instance_eval &blk
      end
@@ -769,8 +769,8 @@ module HappyMapper
 
 end
 
-require 'happymapper/supported_types'
-require 'happymapper/item'
-require 'happymapper/attribute'
-require 'happymapper/element'
-require 'happymapper/text_node'
+require 'xmlmapper/supported_types'
+require 'xmlmapper/item'
+require 'xmlmapper/attribute'
+require 'xmlmapper/element'
+require 'xmlmapper/text_node'

@@ -4,11 +4,11 @@ module Foo
   class Bar; end
 end
 
-describe HappyMapper::Item do
+describe XmlMapper::Item do
 
   describe "new instance" do
     before do
-      @item = HappyMapper::Item.new(:foo, String, :tag => 'foobar')
+      @item = XmlMapper::Item.new(:foo, String, :tag => 'foobar')
     end
 
     it "should accept a name" do
@@ -30,41 +30,41 @@ describe HappyMapper::Item do
 
   describe "#constant" do
     it "should just use type if constant" do
-      item = HappyMapper::Item.new(:foo, String)
+      item = XmlMapper::Item.new(:foo, String)
       item.constant.should == String
     end
 
     it "should convert string type to constant" do
-      item = HappyMapper::Item.new(:foo, 'String')
+      item = XmlMapper::Item.new(:foo, 'String')
       item.constant.should == String
     end
 
     it "should convert string with :: to constant" do
-      item = HappyMapper::Item.new(:foo, 'Foo::Bar')
+      item = XmlMapper::Item.new(:foo, 'Foo::Bar')
       item.constant.should == Foo::Bar
     end
   end
 
   describe "#method_name" do
     it "should convert dashes to underscores" do
-      item = HappyMapper::Item.new(:'foo-bar', String, :tag => 'foobar')
+      item = XmlMapper::Item.new(:'foo-bar', String, :tag => 'foobar')
       item.method_name.should == 'foo_bar'
     end
   end
 
   describe "#xpath" do
     it "should default to tag" do
-      item = HappyMapper::Item.new(:foo, String, :tag => 'foobar')
+      item = XmlMapper::Item.new(:foo, String, :tag => 'foobar')
       item.xpath.should == 'foobar'
     end
 
     it "should prepend with .// if options[:deep] true" do
-      item = HappyMapper::Item.new(:foo, String, :tag => 'foobar', :deep => true)
+      item = XmlMapper::Item.new(:foo, String, :tag => 'foobar', :deep => true)
       item.xpath.should == './/foobar'
     end
 
     it "should prepend namespace if namespace exists" do
-      item = HappyMapper::Item.new(:foo, String, :tag => 'foobar')
+      item = XmlMapper::Item.new(:foo, String, :tag => 'foobar')
       item.namespace = 'v2'
       item.xpath.should == 'v2:foobar'
     end
@@ -72,43 +72,43 @@ describe HappyMapper::Item do
 
   describe "typecasting" do
     it "should work with Strings" do
-      item = HappyMapper::Item.new(:foo, String)
+      item = XmlMapper::Item.new(:foo, String)
       [21, '21'].each do |a|
         item.typecast(a).should == '21'
       end
     end
 
     it "should work with Integers" do
-      item = HappyMapper::Item.new(:foo, Integer)
+      item = XmlMapper::Item.new(:foo, Integer)
       [21, 21.0, '21'].each do |a|
         item.typecast(a).should == 21
       end
     end
 
     it "should work with Floats" do
-      item = HappyMapper::Item.new(:foo, Float)
+      item = XmlMapper::Item.new(:foo, Float)
       [21, 21.0, '21'].each do |a|
         item.typecast(a).should == 21.0
       end
     end
 
     it "should work with Times" do
-      item = HappyMapper::Item.new(:foo, Time)
+      item = XmlMapper::Item.new(:foo, Time)
       item.typecast('2000-01-01 01:01:01.123456').should == Time.local(2000, 1, 1, 1, 1, 1, 123456)
     end
 
     it "should work with Dates" do
-      item = HappyMapper::Item.new(:foo, Date)
+      item = XmlMapper::Item.new(:foo, Date)
       item.typecast('2000-01-01').should == Date.new(2000, 1, 1)
     end
 
     it "should work with DateTimes" do
-      item = HappyMapper::Item.new(:foo, DateTime)
+      item = XmlMapper::Item.new(:foo, DateTime)
       item.typecast('2000-01-01 00:00:00').should == DateTime.new(2000, 1, 1, 0, 0, 0)
     end
 
     it "should work with Boolean" do
-      item = HappyMapper::Item.new(:foo, HappyMapper::Boolean)
+      item = XmlMapper::Item.new(:foo, XmlMapper::Boolean)
       item.typecast('false').should == false
     end
   end

@@ -1,4 +1,4 @@
-module HappyMapper
+module XmlMapper
   class Attribute < Item
     attr_accessor :default
 

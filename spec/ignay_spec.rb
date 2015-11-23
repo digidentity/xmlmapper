@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 class CatalogTree
-  include HappyMapper
+  include XmlMapper
 
   tag 'CatalogTree'
   register_namespace 'xmlns', 'urn:eventis:prodis:onlineapi:1.0'
@@ -16,7 +16,7 @@ end
 
 
 class CatalogNode
-  include HappyMapper
+  include XmlMapper
 
   tag 'Node'
 
@@ -28,7 +28,7 @@ class CatalogNode
   has_many :translations, 'CatalogNode::Translations', :tag => 'Translation', :xpath => 'child::*'
 
   class Translations
-    include HappyMapper
+    include XmlMapper
     tag 'Translation'
 
     attribute :language, String, :tag => 'Language'
@@ -40,7 +40,7 @@ class CatalogNode
 
 end
 
-describe HappyMapper do
+describe XmlMapper do
 
   it "should not be nil" do
     catalog_tree.should_not be_nil
