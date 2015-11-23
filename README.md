@@ -4,7 +4,7 @@ Xmlmapper
 Xmlmapper allows you to parse XML data and convert it quickly and easily into ruby data structures.
 
 This project is a fork of the great work done first by
-[jnunemaker](https://github.com/jnunemaker/xmlmapper).
+[jnunemaker](https://github.com/jnunemaker/happymapper).
 
 ## Major Differences
 
