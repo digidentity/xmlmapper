@@ -497,6 +497,10 @@ module XmlMapper
     end
   end
 
+  def registered_namespaces
+    @registered_namespaces ||= self.class.instance_variable_get('@registered_namespaces')
+  end
+
   #
   # Create an xml representation of the specified class based on defined
   # XmlMapper elements and attributes. The method is defined in a way
@@ -597,8 +601,8 @@ module XmlMapper
       # However, we do not want to add the namespace if the namespace is 'xmlns'
       # which means that it is the default namesapce of the code.
       #
-      if self.class.instance_variable_get('@registered_namespaces') && builder.doc.root
-        self.class.instance_variable_get('@registered_namespaces').each_pair do |name,href|
+      if registered_namespaces && builder.doc.root
+        registered_namespaces.each_pair do |name,href|
           name = nil if name == "xmlns"
           builder.doc.root.add_namespace(name,href)
         end
