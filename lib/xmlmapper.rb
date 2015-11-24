@@ -439,6 +439,11 @@ module XmlMapper
             obj.xml_value = n.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::AS_XML | Nokogiri::XML::Node::SaveOptions::NO_DECLARATION)
           end
 
+          if obj.respond_to?('xml_node=')
+            n.namespaces.each {|name,path| n[name] = path }
+            obj.xml_node = n
+          end
+
           # If the XmlMapper class has the method #xml_content=,
           # attr_write :xml_content, or attr_accessor :xml_content then we want to
           # assign the child xml that we just parsed to the xml_content
