@@ -498,7 +498,7 @@ module XmlMapper
   end
 
   def registered_namespaces
-    @registered_namespaces ||= self.class.instance_variable_get('@registered_namespaces')
+    @registered_namespaces ||= self.class.instance_variable_get('@registered_namespaces').dup
   end
 
   #
