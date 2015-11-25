@@ -436,7 +436,7 @@ module XmlMapper
 
           if obj.respond_to?('xml_value=')
             # n.namespaces.each {|name,path| n[name] = path }
-            obj.xml_value = n.canonicalize
+            obj.xml_value = n.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::AS_XML | Nokogiri::XML::Node::SaveOptions::NO_DECLARATION)
           end
 
           if obj.respond_to?('xml_node=')
