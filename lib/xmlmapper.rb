@@ -440,7 +440,6 @@ module XmlMapper
           end
 
           if obj.respond_to?('xml_node=')
-            n.namespaces.each {|name,path| n[name] = path }
             obj.xml_node = n
           end
 
