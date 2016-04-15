@@ -1,3 +1,7 @@
+## 0.7.0
+
+* Set xml_value with a non canonicalized version
+
 ## 0.5.9 / 2014-02-18
 
 * Correctly output boolean element value 'false'  (confusion)
