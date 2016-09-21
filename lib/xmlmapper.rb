@@ -687,7 +687,32 @@ module XmlMapper
           # an empty element will be written to the xml
           #
           if value.nil? && element.options[:single] && element.options[:state_when_nil]
-            xml.send("#{tag}_","")
+            # NOTE In JRuby 9.0.4.0+ and Nokogiri version 1.6.8, Nokogiri::XML::Builder::NodeBuilder
+            # does not retain the XML namespace prefix for an element when adding an element
+            # to a parent node.
+            #
+            # The namespace prefix must be specified when adding the node to its parent.
+            # This issue manifests when setting an element's :state_when_nil' option to true.
+            #
+            # This JRuby workaround is intended for XML element prefixes that originate from a
+            # single namespace defined in 'registered_namespaces'. If there are
+            # multiple namespaces defined in the 'registered_namespaces' array,
+            # then the first namespace is selected.
+            #
+            # Possible related open issues in Nokogiri:
+            # 1. Nokogiri under jruby fails to create namespaces named the same as a sibling
+            # https://github.com/sparklemotion/nokogiri/issues/1247
+            # 2. Attribute loses namespace when node moved
+            # https://github.com/sparklemotion/nokogiri/issues/1278
+            # 3. Adding namespace-less node to namespaced parent attaches the parent namespace to the child
+            # https://github.com/sparklemotion/nokogiri/issues/425
+            #
+            if RUBY_ENGINE == 'jruby' && !registered_namespaces.empty?
+              ns = registered_namespaces.keys.first.to_sym
+              xml[ns].send("#{tag}_","")
+            else
+              xml.send("#{tag}_","")
+            end
           end
 
           #
