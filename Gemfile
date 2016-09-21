@@ -4,6 +4,6 @@ gemspec
 
 group :development do
   gem "rake", "0.9.2"
-  gem "guard-rspec"
+  gem "guard-rspec", platform: :mri
   gem 'rb-fsevent', '~> 0.9'
 end
