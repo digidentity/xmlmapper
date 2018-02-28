@@ -2,7 +2,11 @@ module XmlMapper
   class TextNode < Item
 
     def find(node, namespace, xpath_options)
-      yield(node.children.detect{|c| c.text?})
+      if node.children.any? {|c| c.text?}
+        yield(node)
+      else
+        yield(nil)
+      end
     end
   end
 end

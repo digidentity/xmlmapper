@@ -554,7 +554,6 @@ end
 class DefaultNamespaceCombi
   include XmlMapper
 
-
   register_namespace 'bk', "urn:loc.gov:books"
   register_namespace 'isbn', "urn:ISBN:0-395-36341-6"
   register_namespace 'p', "urn:loc.gov:people"
@@ -565,6 +564,14 @@ class DefaultNamespaceCombi
   element :title, String, :namespace => 'bk', :tag => "title"
   element :number, String, :namespace => 'isbn', :tag => "number"
   element :author, String, :namespace => 'p', :tag => "author"
+end
+
+class TextNodeWithComment
+  include XmlMapper
+
+  tag 'textnode'
+
+  content :value, String
 end
 
 describe XmlMapper do
@@ -1131,6 +1138,15 @@ describe XmlMapper do
       address = Address.parse(xml)
 
       expect(address.xml_content).to eq %{<street>Milchstrasse</street><housenumber>23</housenumber>}
+    end
+  end
+
+  context 'text_node with comments' do
+    it 'returns the full text in the node' do
+      xml = fixture_file('text_node_with_comment.xml')
+      text_node = TextNodeWithComment.parse(xml, single: true)
+
+      expect(text_node.value).to eq "With  Comment"
     end
   end
 
